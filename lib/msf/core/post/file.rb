@@ -77,6 +77,22 @@ module Msf::Post::File
   end
 
   #
+  # Create +path+ directory on the remote system
+  #
+  # @param path [String] Remote directory name to create
+  # @return [void] 
+  def mkdir(path)
+    e_path = expand_path(path) rescue path
+    if session.type == "meterpreter"
+      session.fs.dir.mkdir(e_path)
+    else
+      session.shell_command_token("mkdir \"#{e_path}\"")
+    end
+  end
+
+  alias md mkdir
+
+  #
   # Expand any environment variables to return the full path specified by +path+.
   #
   # @return [String]
